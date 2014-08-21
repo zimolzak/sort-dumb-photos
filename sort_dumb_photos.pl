@@ -5,12 +5,16 @@ my @files = split(/\n/, `ls`);
 my @years;
 for(@files){
     next unless /\.jpg/;
-    s/^\d\d\d\d(\d\d).*/$1/; # mmdd(YY)hhhh
+    s/^\d\d\d\d(\d\d).*/$1/; # extract years: mmdd(YY)hhhh....
     push(@years, $_);
 }
 
-my $uref = uniq(\@years);
-print @{$uref};
+my @unique_years = @{uniq(\@years)};
+
+for(@unique_years){
+    (system("mkdir year" . $_) == 0) or die "Can't mkdir year $_, stopped";
+    #mkdir returns 0 on success.
+}
 
 sub uniq {
     my $ref = shift;
